@@ -529,8 +529,14 @@ void nhapHoaDon(HoaDon &x){
 }
 
 void hienHoaDon(HoaDon x){
-	cout<<setw(15)<<x.maHD<<setw(15)<<x.thoiGianLap<<setw(15)
-	<<x.thoiGianThue<<setw(15)<<x.tongTien<<endl;
+	cout<<setw(12)<<x.maHD;
+	cout<<setw(15)<<x.thoiGianLap;
+	cout<<setw(15)<<x.nv.tenNV;
+	cout<<setw(15)<<x.nv.maNV;
+	cout<<setw(15)<<x.kh.tenKH;
+	cout<<setw(10)<<x.kh.sdt;
+	cout<<setw(10)<<x.soPhong;
+	cout<<setw(10)<<x.tongTien<<endl;
 	
 }
 
