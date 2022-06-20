@@ -530,8 +530,8 @@ void nhapHoaDon(HoaDon &x){
 
 void hienHoaDon(HoaDon x){
 	cout<<setw(15)<<x.maHD<<setw(15)<<x.thoiGianLap<<setw(15)
-	<<x.thoiGianThue<<setw(12)<<x.tongTien<<endl;
-	hienDSKH(listKH);
+	<<x.thoiGianThue<<setw(15)<<x.tongTien<<endl;
+	
 }
 
 void initHoaDon(ListHD &Q){
