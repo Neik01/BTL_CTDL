@@ -16,7 +16,7 @@ struct NhanVien{
 	string tenNV;
 	string ngaySinh;
 	string gioiTinh;
-	int sdt;
+	string sdt;
 };
 
 struct NodeNV {
@@ -53,7 +53,6 @@ struct ListKH{
 //SECTION Phong 
 struct Phong{
 	string maP;
-	string tenP;
 	string loaiP;
 	float donGia; 
 }; 
@@ -145,6 +144,8 @@ void insertFirstP(ListP &Q, NodeP *p);
 void nhapDSP(ListP &Q);
 
 void hienDSP(ListP Q);
+
+
 
 //Các thao tác với hóa đơn
 void nhapHoaDon(HoaDon &x); //LINK BTL.cpp#nhapHD
@@ -284,9 +285,8 @@ int main(){
 //ANCHOR[id=nhapNV] nhân viên
 void nhapNV(NhanVien &x){
 	fflush(stdin); 
-	cout<<"Ma nhan vien: ";
+	cout<<"\nMa nhan vien: ";
 	getline(cin,x.maNV);
-	cin.ignore();
 	cout<<"Ten nhan vien: ";
 	getline(cin,x.tenNV);
 	cout<<"Ngay sinh: ";
@@ -294,7 +294,7 @@ void nhapNV(NhanVien &x){
 	cout<<"Gioi tinh :";
 	getline(cin,x.gioiTinh);
 	cout<<"SDT: ";
-	cin>>x.sdt;
+	getline(cin,x.sdt);
 }
 
 void hienNV(NhanVien x){
@@ -363,7 +363,7 @@ void hienDSNV(ListNV Q){
 //ANCHOR[id=nhapKhachHang] khách hàng
 void nhapKhachHang(KhachHang &x){
 	fflush(stdin); 
-	cout<<"Ma khach hang: ";
+	cout<<"\nMa khach hang: ";
 	getline(cin,x.maKH);
 	cout<<"Ten khach hang: ";
 	getline(cin,x.tenKH);
@@ -441,8 +441,6 @@ void nhapPhong(Phong &x){
 	fflush(stdin); 
 	cout<<"Ma phong: ";
 	getline(cin,x.maP);
-	cout<<"Ten phong: ";
-	getline(cin,x.tenP);
 	cout<<"Loai phong: ";
 	getline(cin,x.loaiP);
 	cout<<"Don gia: ";
@@ -450,9 +448,7 @@ void nhapPhong(Phong &x){
 } 
 
 void hienPhong(Phong x){
-	
 	cout<<setw(12)<<x.maP;
-	cout<<setw(12)<<x.tenP;
 	cout<<setw(12)<<x.loaiP;
 	cout<<setw(12)<<x.donGia;
 	cout<<endl;
@@ -493,7 +489,7 @@ void nhapDSP(ListP &Q, int n){
     for(int i=0;i<n;i++){
         NodeP *p;
         Phong x;
-        cout<<"Moi ban nhap thong tin phong";
+        cout<<"Moi ban nhap thong tin phong: "<<endl;
         nhapPhong(x);
         p = getNodePhong(x);
         insertFirstP(Q, p);
@@ -502,16 +498,18 @@ void nhapDSP(ListP &Q, int n){
 }
 
 void hienDSP(ListP Q){
-	NodeP *p;
 	cout<<"Thong tin phong duoc thue: \n";
-	cout<<setw(12)<<"Ma Phong"<<setw(12)<<"Ten Phong"<<setw(12)<<"Loai Phong"<<setw(12)<<"Don Gia";
-	hienPhong(p->info);
+	cout<<setw(12)<<"Ma Phong"<<setw(12)<<"Loai Phong"<<setw(12)<<"Don Gia"<<endl;
+	for (NodeP *i = Q.Head; i !=NULL; i=i->next)
+	{
+		hienPhong(i->info);/* code */
+	}
 }
 
 //ANCHOR[id=nhapHD] hóa đơn
 void nhapHoaDon(HoaDon &x){
 	fflush(stdin);
-    cout<<"\nNhan vien lap: ";
+    cout<<"\nNhan vien lap";
     nhapNV(x.nv); 
 	cout<<"\nNhap ma hoa don: ";
 	getline(cin,x.maHD);
@@ -519,24 +517,24 @@ void nhapHoaDon(HoaDon &x){
 	getline(cin,x.thoiGianLap);
 	cout<<"\nNhap thoi gian thue phong(so ngay): ";
 	cin>>x.thoiGianThue;
-    cout<<"\nNhap khach hang: ";
+    cout<<"\nNhap khach hang ";
     nhapKhachHang(x.kh);
     cout<<"\nNhap so phong khach thue: ";
     cin>>x.soPhong;
-    ListP listPhong;
-    nhapDSP(listPhong,x.soPhong);
-    x.tongTien=tinhTienPhong(listPhong,x.thoiGianThue);
+    nhapDSP(x.DSP,x.soPhong);
+    x.tongTien=tinhTienPhong(x.DSP,x.thoiGianThue);
 }
 
 void hienHoaDon(HoaDon x){
-	cout<<setw(12)<<x.maHD;
-	cout<<setw(15)<<x.thoiGianLap;
-	cout<<setw(15)<<x.nv.tenNV;
-	cout<<setw(15)<<x.nv.maNV;
-	cout<<setw(15)<<x.kh.tenKH;
-	cout<<setw(10)<<x.kh.sdt;
-	cout<<setw(10)<<x.soPhong;
-	cout<<setw(10)<<x.tongTien<<endl;
+	cout<<setw(30)<<"\nMa hoa don: "<<x.maHD;
+	cout<<setw(20)<<"Thoi gian lap: "<<x.thoiGianLap;
+	cout<<setw(30)<<"\nTen nhan vien lap: "<<x.nv.tenNV;
+	cout<<setw(20)<<"Ma nhan vien: "<<x.nv.maNV;
+	cout<<setw(30)<<"\nTen khach hang: "<<x.kh.tenKH;
+	cout<<setw(20)<<"SDT: "<<x.kh.sdt;
+	cout<<setw(10)<<"\nSo phong thue: "<<x.soPhong<<endl;
+	hienDSP(x.DSP);
+	cout<<setw(10)<<"\nTong tien thanh toan: "<<x.tongTien<<endl;
 	
 }
 
@@ -586,7 +584,6 @@ void nhapDSHD(ListHD &Q){
 void hienDSHD(ListHD Q){
 	NodeHD *p;
 	cout<<"Danh sach hoa don"<<endl;
-	cout<<"Ma hoa don"<<setw(12)<<"Thoi gian lap"<<setw(12)<<"Thoi gian thue"<<setw(12)<<"Tong tien"<<endl;
 	for(p = Q.Head; p != NULL; p = p->next)
 	{
 		hienHoaDon(p->info);
