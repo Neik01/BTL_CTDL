@@ -162,46 +162,7 @@ void nhapDSHD(ListHD &Q);
 
 void hienDSHD(ListHD Q);
 
-double tinhTienPhong(ListP ds,int gioThue){
-    double sum=0;
-    for (NodeP *i = ds.Head; i!=NULL; i=i->next)
-    {
-        sum+=i->info.donGia*gioThue;
-        /* code */
-    }
-    return sum;
-}
-
-
-/*Node *InNVTheoTen(ListNV NV, string n)
-{
-	NodeNV *p;
-	for( p = NV.head; p != NULL; p = p->next)
-	{
-		if(p->info.tenNV == n)
-			break;
-			return p;
-	}
-}
-
-void SapXepNVTheoLuong(ListNV NV)
-{
-	NodeNV *p;
-	NodeNV *a;
-	NhanVien tmp;
-	for( p = NV.head; p != NULL; p = p->next)
-	{
-		for(a = p-> next; a != NULL; a = a ->next)
-		{
-			if(p->info.luong > a->info.luong)
-			{
-			    tmp = p->info;
-				p->info = a->info;
-				a->info = tmp;
-			}
-		}
-	}
-}*/
+double tinhTienPhong(ListP ds,int gioThue);
 
 //ANCHOR hàm main
 int main(){
@@ -212,9 +173,7 @@ int main(){
 		cout<<"QUAN LI HOA DON KHACH SAN ";
 		cout<<"\n1.Nhap danh sach hoa don";
 		cout<<"\n2.Hien danh sach hoa don";
-		cout<<"\n3.Hien nhan vien theo ten";
-		/*cout<<"\n4.Sap xep danh sach theo luong nhan vien giam dan";
-		cout<<"\n5.Tim kiem nhan vien theo ma";*/
+		cout<<"\n3.Sap xep hoa don";
 		cout<<"\n0.Thoat chuong trinh";
 		cout<<"\nMoi ban chon: ";
 		cin>>chon;
@@ -226,51 +185,6 @@ int main(){
 			case 2:
 				hienDSHD(listHD);
 				break;
-			// case 3:
-			// 	{
-			// 	string x;
-			// 	cout<<"Nhap ten nhan vien can in: ";
-            //     getline(cin,x);
-			// 	cin.ignore();
-			// 	NodeNV *p=timKiemNVTheoMa()
-			// 	if(p==NULL)
-			// 	{
-			// 		cout<<"Khong co nhan vien nay";
-			// 		break;
-			// 	}
-			// 	else
-			// 	{
-			// 		cout<<"\nNhan vien can in: \n";
-			// 		hienNV(p->info);
-			// 		break;
-			// 	}
-			// }
-
-			/*case 4:
-				cout<<"Danh sach sau khi sap xep la: \n";
-				SapXepTheoLuong(NV);
-				hienDS(NV);
-				break;
-			case 5:
-			//	{	
-				int k;
-				cout<<"Nhap ma cua nhan vien can tim: ";
-				cin>>k;
-//				p=timKiemTheoMa(NV,k);
-//				if(p==NULL)
-//				{
-//					cout<<"Khong co nhan vien nay";
-//					break;
-//				}
-//				else 
-//				{
-//					cout<<"\nNhan vien can tim: \n";
-//					hienNV(p->info);
-//					break;
-//				}
-		//	}
-			timKiemTheoMa(NV,k);
-			break;*/
 			case 0:
 				exit(1);
 				break;
@@ -506,6 +420,15 @@ void hienDSP(ListP Q){
 	}
 }
 
+double tinhTienPhong(ListP ds,int gioThue){
+    double sum=0;
+    for (NodeP *i = ds.Head; i!=NULL; i=i->next)
+    {
+        sum+=i->info.donGia*gioThue;
+        /* code */
+    }
+    return sum;
+}
 //ANCHOR[id=nhapHD] hóa đơn
 void nhapHoaDon(HoaDon &x){
 	fflush(stdin);
@@ -526,11 +449,11 @@ void nhapHoaDon(HoaDon &x){
 }
 
 void hienHoaDon(HoaDon x){
-	cout<<setw(30)<<"\nMa hoa don: "<<x.maHD;
+	cout<<setw(30)<<"\nMa hoa don: "<<x.maHD<<"||";
 	cout<<setw(20)<<"Thoi gian lap: "<<x.thoiGianLap;
-	cout<<setw(30)<<"\nTen nhan vien lap: "<<x.nv.tenNV;
+	cout<<setw(30)<<"\nTen nhan vien lap: "<<x.nv.tenNV<<"||";
 	cout<<setw(20)<<"Ma nhan vien: "<<x.nv.maNV;
-	cout<<setw(30)<<"\nTen khach hang: "<<x.kh.tenKH;
+	cout<<setw(30)<<"\nTen khach hang: "<<x.kh.tenKH<<"||";
 	cout<<setw(20)<<"SDT: "<<x.kh.sdt;
 	cout<<setw(10)<<"\nSo phong thue: "<<x.soPhong<<endl;
 	hienDSP(x.DSP);
