@@ -166,15 +166,7 @@ void nhapDSHD(ListHD &Q);
 
 void hienDSHD(ListHD Q);
 
-double tinhTienPhong(ListP ds,int gioThue){
-    double sum=0;
-    for (NodeP *i = ds.Head; i!=NULL; i=i->next)
-    {
-        sum+=i->info.donGia*gioThue;
-        /* code */
-    }
-    return sum;
-}
+double tinhTienPhong(ListP ds,int gioThue);
 
 
 /*Node *InNVTheoTen(ListNV NV, string n)
@@ -519,6 +511,16 @@ void hienDSP(ListP Q){
 	hienPhong(p->info);
 }
 
+double tinhTienPhong(ListP ds,int gioThue){
+    double sum=0;
+    for (NodeP *i = ds.Head; i!=NULL; i=i->next)
+    {
+        sum+=i->info.donGia*gioThue;
+        /* code */
+    }
+    return sum;
+}
+
 //ANCHOR[id=nhapHD] hóa đơn
 void nhapHoaDon(HoaDon &x){
 	fflush(stdin);
@@ -547,7 +549,8 @@ void hienHoaDon(HoaDon x){
 
 void initHoaDon(ListHD &Q){
 	Q.Head = NULL;
-	Q.Tail = NULL; 
+	Q.Tail = NULL;
+
 }
 
 NodeHD *getNodeHD(HoaDon x){
