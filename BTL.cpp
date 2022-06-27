@@ -16,12 +16,13 @@ struct NhanVien{
 	string tenNV;
 	string ngaySinh;
 	string gioiTinh;
-	string sdt;
+	int sdt;
 };
 
 struct NodeNV {
 	NhanVien info;
 	struct NodeNV *next;
+	struct NodeNV *prev;
 };
 
 struct ListNV{
@@ -42,6 +43,7 @@ struct KhachHang{
 struct NodeKH {
 	KhachHang info;
 	struct NodeKH *next;
+	struct NodeKH *prev;
 };
 
 struct ListKH{
@@ -53,6 +55,7 @@ struct ListKH{
 //SECTION Phong 
 struct Phong{
 	string maP;
+	string tenP;
 	string loaiP;
 	float donGia; 
 }; 
@@ -60,6 +63,8 @@ struct Phong{
 struct NodeP {
 	Phong info;
 	struct NodeP *next;
+	struct NodeP *prev;
+	
 };
 
 struct ListP{
@@ -83,6 +88,7 @@ struct HoaDon{
 struct NodeHD{
 	HoaDon info;
 	struct NodeHD *next; 
+	struct NodeHD *prev; 
 };
 
 struct ListHD{
@@ -145,8 +151,6 @@ void nhapDSP(ListP &Q);
 
 void hienDSP(ListP Q);
 
-
-
 //Các thao tác với hóa đơn
 void nhapHoaDon(HoaDon &x); //LINK BTL.cpp#nhapHD
 
@@ -162,7 +166,46 @@ void nhapDSHD(ListHD &Q);
 
 void hienDSHD(ListHD Q);
 
-double tinhTienPhong(ListP ds,int gioThue);
+double tinhTienPhong(ListP ds,int gioThue){
+    double sum=0;
+    for (NodeP *i = ds.Head; i!=NULL; i=i->next)
+    {
+        sum+=i->info.donGia*gioThue;
+        /* code */
+    }
+    return sum;
+}
+
+
+/*Node *InNVTheoTen(ListNV NV, string n)
+{
+	NodeNV *p;
+	for( p = NV.head; p != NULL; p = p->next)
+	{
+		if(p->info.tenNV == n)
+			break;
+			return p;
+	}
+}
+
+void SapXepNVTheoLuong(ListNV NV)
+{
+	NodeNV *p;
+	NodeNV *a;
+	NhanVien tmp;
+	for( p = NV.head; p != NULL; p = p->next)
+	{
+		for(a = p-> next; a != NULL; a = a ->next)
+		{
+			if(p->info.luong > a->info.luong)
+			{
+			    tmp = p->info;
+				p->info = a->info;
+				a->info = tmp;
+			}
+		}
+	}
+}*/
 
 //ANCHOR hàm main
 int main(){
@@ -173,7 +216,9 @@ int main(){
 		cout<<"QUAN LI HOA DON KHACH SAN ";
 		cout<<"\n1.Nhap danh sach hoa don";
 		cout<<"\n2.Hien danh sach hoa don";
-		cout<<"\n3.Sap xep hoa don";
+		cout<<"\n3.Tim kiem hoa don theo ma";
+		/*cout<<"\n4.Sap xep danh sach theo luong nhan vien giam dan";
+		cout<<"\n5.Tim kiem nhan vien theo ma";*/
 		cout<<"\n0.Thoat chuong trinh";
 		cout<<"\nMoi ban chon: ";
 		cin>>chon;
@@ -185,6 +230,51 @@ int main(){
 			case 2:
 				hienDSHD(listHD);
 				break;
+			// case 3:
+			// 	{
+			// 	string x;
+			// 	cout<<"Nhap ten nhan vien can in: ";
+            //     getline(cin,x);
+			// 	cin.ignore();
+			// 	NodeNV *p=timKiemNVTheoMa()
+			// 	if(p==NULL)
+			// 	{
+			// 		cout<<"Khong co nhan vien nay";
+			// 		break;
+			// 	}
+			// 	else
+			// 	{
+			// 		cout<<"\nNhan vien can in: \n";
+			// 		hienNV(p->info);
+			// 		break;
+			// 	}
+			// }
+
+			/*case 4:
+				cout<<"Danh sach sau khi sap xep la: \n";
+				SapXepTheoLuong(NV);
+				hienDS(NV);
+				break;
+			case 5:
+			//	{	
+				int k;
+				cout<<"Nhap ma cua nhan vien can tim: ";
+				cin>>k;
+//				p=timKiemTheoMa(NV,k);
+//				if(p==NULL)
+//				{
+//					cout<<"Khong co nhan vien nay";
+//					break;
+//				}
+//				else 
+//				{
+//					cout<<"\nNhan vien can tim: \n";
+//					hienNV(p->info);
+//					break;
+//				}
+		//	}
+			timKiemTheoMa(NV,k);
+			break;*/
 			case 0:
 				exit(1);
 				break;
@@ -199,8 +289,9 @@ int main(){
 //ANCHOR[id=nhapNV] nhân viên
 void nhapNV(NhanVien &x){
 	fflush(stdin); 
-	cout<<"\nMa nhan vien: ";
+	cout<<"Ma nhan vien: ";
 	getline(cin,x.maNV);
+	cin.ignore();
 	cout<<"Ten nhan vien: ";
 	getline(cin,x.tenNV);
 	cout<<"Ngay sinh: ";
@@ -208,7 +299,7 @@ void nhapNV(NhanVien &x){
 	cout<<"Gioi tinh :";
 	getline(cin,x.gioiTinh);
 	cout<<"SDT: ";
-	getline(cin,x.sdt);
+	cin>>x.sdt;
 }
 
 void hienNV(NhanVien x){
@@ -226,6 +317,7 @@ NodeNV *getNodeNV(NhanVien x){
 	}
 	p->info = x;
 	p->next = NULL;
+	p->prev=NULL;
 	return p;
 }
 
@@ -236,6 +328,7 @@ void insertFirstNV(ListNV &Q, NodeNV *p){
 	}
 	else{
 		p->next = Q.Head;
+		Q.Head->prev=p;
 		Q.Head = p;
 	}
 }
@@ -277,7 +370,7 @@ void hienDSNV(ListNV Q){
 //ANCHOR[id=nhapKhachHang] khách hàng
 void nhapKhachHang(KhachHang &x){
 	fflush(stdin); 
-	cout<<"\nMa khach hang: ";
+	cout<<"Ma khach hang: ";
 	getline(cin,x.maKH);
 	cout<<"Ten khach hang: ";
 	getline(cin,x.tenKH);
@@ -305,6 +398,7 @@ NodeKH *getNodeKH(KhachHang x){
 	}
 	p->info = x;
 	p->next = NULL;
+	p->prev=NULL;
 	return p;
 }
 
@@ -320,6 +414,7 @@ void insertFirstKH(ListKH &Q, NodeKH *p){
 	}
 	else{
 		p->next = Q.Head;
+		Q.Head->prev=p;
 		Q.Head = p;
 	}
 }
@@ -355,6 +450,8 @@ void nhapPhong(Phong &x){
 	fflush(stdin); 
 	cout<<"Ma phong: ";
 	getline(cin,x.maP);
+	cout<<"Ten phong: ";
+	getline(cin,x.tenP);
 	cout<<"Loai phong: ";
 	getline(cin,x.loaiP);
 	cout<<"Don gia: ";
@@ -362,7 +459,9 @@ void nhapPhong(Phong &x){
 } 
 
 void hienPhong(Phong x){
+	
 	cout<<setw(12)<<x.maP;
+	cout<<setw(12)<<x.tenP;
 	cout<<setw(12)<<x.loaiP;
 	cout<<setw(12)<<x.donGia;
 	cout<<endl;
@@ -383,6 +482,7 @@ NodeP *getNodePhong(Phong x){
 	}
 	p->info = x;
 	p->next = NULL;
+	p->prev=NULL;
 	return p;
 }
 
@@ -393,6 +493,7 @@ void insertFirstP(ListP &Q, NodeP *p){
 	}
 	else{
 		p->next = Q.Head;
+		Q.Head->prev=p;
 		Q.Head = p;
 	}
 }
@@ -403,7 +504,7 @@ void nhapDSP(ListP &Q, int n){
     for(int i=0;i<n;i++){
         NodeP *p;
         Phong x;
-        cout<<"Moi ban nhap thong tin phong: "<<endl;
+        cout<<"Moi ban nhap thong tin phong";
         nhapPhong(x);
         p = getNodePhong(x);
         insertFirstP(Q, p);
@@ -412,27 +513,16 @@ void nhapDSP(ListP &Q, int n){
 }
 
 void hienDSP(ListP Q){
+	NodeP *p;
 	cout<<"Thong tin phong duoc thue: \n";
-	cout<<setw(12)<<"Ma Phong"<<setw(12)<<"Loai Phong"<<setw(12)<<"Don Gia"<<endl;
-	for (NodeP *i = Q.Head; i !=NULL; i=i->next)
-	{
-		hienPhong(i->info);/* code */
-	}
+	cout<<setw(12)<<"Ma Phong"<<setw(12)<<"Ten Phong"<<setw(12)<<"Loai Phong"<<setw(12)<<"Don Gia";
+	hienPhong(p->info);
 }
 
-double tinhTienPhong(ListP ds,int gioThue){
-    double sum=0;
-    for (NodeP *i = ds.Head; i!=NULL; i=i->next)
-    {
-        sum+=i->info.donGia*gioThue;
-        /* code */
-    }
-    return sum;
-}
 //ANCHOR[id=nhapHD] hóa đơn
 void nhapHoaDon(HoaDon &x){
 	fflush(stdin);
-    cout<<"\nNhan vien lap";
+    cout<<"\nNhan vien lap: ";
     nhapNV(x.nv); 
 	cout<<"\nNhap ma hoa don: ";
 	getline(cin,x.maHD);
@@ -440,25 +530,19 @@ void nhapHoaDon(HoaDon &x){
 	getline(cin,x.thoiGianLap);
 	cout<<"\nNhap thoi gian thue phong(so ngay): ";
 	cin>>x.thoiGianThue;
-    cout<<"\nNhap khach hang ";
+    cout<<"\nNhap khach hang: ";
     nhapKhachHang(x.kh);
     cout<<"\nNhap so phong khach thue: ";
     cin>>x.soPhong;
-    nhapDSP(x.DSP,x.soPhong);
-    x.tongTien=tinhTienPhong(x.DSP,x.thoiGianThue);
+    ListP listPhong;
+    nhapDSP(listPhong,x.soPhong);
+    x.tongTien=tinhTienPhong(listPhong,x.thoiGianThue);
 }
 
 void hienHoaDon(HoaDon x){
-	cout<<setw(30)<<"\nMa hoa don: "<<x.maHD<<"||";
-	cout<<setw(20)<<"Thoi gian lap: "<<x.thoiGianLap;
-	cout<<setw(30)<<"\nTen nhan vien lap: "<<x.nv.tenNV<<"||";
-	cout<<setw(20)<<"Ma nhan vien: "<<x.nv.maNV;
-	cout<<setw(30)<<"\nTen khach hang: "<<x.kh.tenKH<<"||";
-	cout<<setw(20)<<"SDT: "<<x.kh.sdt;
-	cout<<setw(10)<<"\nSo phong thue: "<<x.soPhong<<endl;
-	hienDSP(x.DSP);
-	cout<<setw(10)<<"\nTong tien thanh toan: "<<x.tongTien<<endl;
-	
+	cout<<setw(15)<<x.maHD<<setw(15)<<x.thoiGianLap<<setw(15)
+	<<x.thoiGianThue<<setw(12)<<x.tongTien<<endl;
+	hienDSKH(listKH);
 }
 
 void initHoaDon(ListHD &Q){
@@ -475,6 +559,7 @@ NodeHD *getNodeHD(HoaDon x){
 	}
 	p->info = x;
 	p->next = NULL;
+	p->prev =NULL;
 	return p; 
 } 
 
@@ -485,6 +570,7 @@ void insertFirstHoaDon(ListHD &Q, NodeHD *p){
 	}
 	else{
 		p->next = Q.Head;
+		Q.Head->prev=p;
 		Q.Head = p;
 	}
 }
@@ -507,6 +593,7 @@ void nhapDSHD(ListHD &Q){
 void hienDSHD(ListHD Q){
 	NodeHD *p;
 	cout<<"Danh sach hoa don"<<endl;
+	cout<<"Ma hoa don"<<setw(12)<<"Thoi gian lap"<<setw(12)<<"Thoi gian thue"<<setw(12)<<"Tong tien"<<endl;
 	for(p = Q.Head; p != NULL; p = p->next)
 	{
 		hienHoaDon(p->info);
